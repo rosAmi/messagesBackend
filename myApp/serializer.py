@@ -14,8 +14,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 # class MessageSerializer(serializers.HyperlinkedModelSerializer):
-#     sender = serializers.ReadOnlyField(source='sender.username')
+    # sender = serializers.ReadOnlyField(source='sender.username')
 class MessageSerializer(serializers.ModelSerializer):
+    sender = serializers.ReadOnlyField(source='sender.username')
 
     class Meta:
         model = Message
