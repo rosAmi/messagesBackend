@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Messages</title>
+</head>
+<body>
+
+<h1>My Messages</h1>
+
+<p>List of items:</p>
+
+<table border="1">
+  <tr>
+    <th>MessageID</th>
+    <th>created</th>
+    <th>subject</th>
+    <th>message</th>
+    <th>isRead</th>
+    <th>sender</th>
+    <th>receiver</th>
+    <th>Link</th>
+  </tr>
+  {% for x in mymessages %}
+    <tr>
+      <script> let m_id = {{x.id}} ;</script>
+      <td>{{ x.id }}</td>
+      <td>{{ x.created }}</td>
+      <td>{{ x.subject }}</td>
+      <td>{{ x.message }}</td>
+      <td>{{ x.isRead }}</td>
+      <td>{{ x.sender_id }}</td>
+      <td>{{ x.receiver_id }}</td>
+      <td><a href="../mymessages/" onclick="location.href=this.href+m_id;return false;"> here </a></td>
+
+    </tr>
+  {% endfor %}
+</table>
+
+<!--<p>The queryset object:</p>-->
+
+<!--<p>{{ mymessages }} </p>-->
+
+</body>
+</html>

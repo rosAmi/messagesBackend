@@ -3,8 +3,6 @@ from django.contrib.auth.models import User
 from .models import Message
 
 
-# class UserSerializer(serializers.HyperlinkedModelSerializer):
-#     messages = serializers.HyperlinkedRelatedField(many=True, view_name='message-detail', read_only=True)
 class UserSerializer(serializers.ModelSerializer):
     messages = serializers.PrimaryKeyRelatedField(many=True, queryset=Message.objects.all())
 
@@ -13,15 +11,13 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'messages']
 
 
-# class MessageSerializer(serializers.HyperlinkedModelSerializer):
-    # sender = serializers.ReadOnlyField(source='sender.username')
 class MessageSerializer(serializers.ModelSerializer):
     sender = serializers.ReadOnlyField(source='sender.username')
+    # receiver = serializers.ReadOnlyField(source='receiver.username')
 
     class Meta:
         model = Message
         fields = '__all__'
-        # fields = ['id', 'subject', 'message', 'isRead', 'sender']
 
     def create(self, validated_data):
         return Message.objects.create(**validated_data)
@@ -32,3 +28,16 @@ class MessageSerializer(serializers.ModelSerializer):
         instance.sender = validated_data.get('sender', instance.sender)
         instance.save()
         return instance
+
+
+class MessageSerializer2(serializers.ModelSerializer):
+    sender = serializers.ReadOnlyField(source='sender.username')
+    receiver = serializers.ReadOnlyField(source='receiver.username')
+
+    class Meta:
+        model = Message
+        fields = '__all__'
+        # fields = ['id', 'created', 'subject', 'message', 'isRead', 'sender', 'receiver']
+
+    def create(self, validated_data):
+        return Message.objects.create(**validated_data)
