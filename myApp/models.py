@@ -7,7 +7,7 @@ class Message(models.Model):
     subject = models.CharField(max_length=100, blank=True, default='')
     message = models.TextField()
     isRead = models.BooleanField(default=False, editable=False)
-    sender = models.ForeignKey('auth.User', related_name='sent_messages', on_delete=models.CASCADE)
+    sender = models.ForeignKey('auth.User', related_name='messages', on_delete=models.CASCADE)
     receiver = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='received_messages', on_delete=models.CASCADE)
 
     class Meta:

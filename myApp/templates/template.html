@@ -3,6 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Messages</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        function getID(elem) {
+            let item = $(elem).closest("tr").find("#idm").text();;
+             // alert("item= " + item);
+          return item
+        }
+
+        function GetRowIndex(element) {
+          let rowJavascript = element.parentNode.parentNode;
+          // let rowjQuery = $(element).closest("tr")
+          // alert("JavaScript Row Index : " + (rowJavascript.rowIndex) + "\njQuery Row Index : " + (rowjQuery[0].rowIndex));
+          return rowJavascript.rowIndex
+        }
+
+    </script>
 </head>
 <body>
 
@@ -20,19 +37,22 @@
     <th>sender</th>
     <th>receiver</th>
     <th>Link</th>
+    <th>Link2</th>
   </tr>
+<!--  <script>let i = -1; const m_id=[]</script>-->
   {% for x in mymessages %}
     <tr>
-      <script> let m_id = {{x.id}} ;</script>
-      <td>{{ x.id }}</td>
+      <td id="idm">{{ x.id }}</td>
       <td>{{ x.created }}</td>
       <td>{{ x.subject }}</td>
       <td>{{ x.message }}</td>
       <td>{{ x.isRead }}</td>
       <td>{{ x.sender_id }}</td>
       <td>{{ x.receiver_id }}</td>
-      <td><a href="../mymessages/" onclick="location.href=this.href+m_id;return false;"> here </a></td>
-
+      <td><a href="../mymessages/" onclick="location.href=this.href+getID(this);return false;"> here </a></td>
+      {% with x.id|stringformat:"s" as x_id %}
+      <td> {{'http://127.0.0.1:8000/api/mymessages/'| add:x_id | urlize}} </td>
+      {% endwith %}
     </tr>
   {% endfor %}
 </table>
