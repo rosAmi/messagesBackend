@@ -53,6 +53,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'messageAPI.urls'
 
+CSRF_TRUSTED_ORIGINS = ['https://80a0-149-106-250-114.eu.ngrok.io']
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
