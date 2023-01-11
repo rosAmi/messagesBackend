@@ -30,7 +30,7 @@ class MessageSerializer(serializers.ModelSerializer):
         return instance
 
 
-class MessageSerializer2(serializers.ModelSerializer):
+class MessageSerializerAll(serializers.ModelSerializer):
     sender = serializers.ReadOnlyField(source='sender.username')
     receiver = serializers.ReadOnlyField(source='receiver.username')
 

@@ -7,7 +7,7 @@ from rest_framework.viewsets import ModelViewSet, ViewSet, ReadOnlyModelViewSet
 from django.views.generic import TemplateView
 from django.contrib.auth.models import User
 from .models import Message
-from .serializer import MessageSerializer, MessageSerializer2
+from .serializer import MessageSerializer, MessageSerializerAll
 from .serializer import UserSerializer
 from rest_framework import permissions, status
 from .permissions import IsOwnerOrReadOnly
@@ -41,16 +41,16 @@ class MyMessages(ViewSet):  # Get All my sent/receive messages
             return Response({"detail": "Authentication credentials were not provided."})
         ids = Message.objects.filter(Q(sender=request.user) | Q(receiver=request.user)).values_list('id', flat=True)
         queryset = Message.objects.filter(pk__in=ids)
-        serializer = MessageSerializer2(queryset, many=True)
+        serializer = MessageSerializerAll(queryset, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
         if request.user.id is None:
-            return Response({"detail": "Aut0hentication credentials were not provided."})
+            return Response({"detail": "Authentication credentials were not provided."})
         ids = Message.objects.filter(Q(sender=request.user) | Q(receiver=request.user)).values_list('pk', flat=True)
         queryset = Message.objects.filter(pk__in=ids)
         message = get_object_or_404(queryset, pk=pk)  #
-        serializer = MessageSerializer2(message)
+        serializer = MessageSerializerAll(message)
         if request.user.id == message.receiver.id:  # mark message as is_read=true
             message_obj = Message.objects.get(pk=pk)
             message_obj.isRead = True
@@ -77,7 +77,7 @@ class MyMessages(ViewSet):  # Get All my sent/receive messages
 
 
 class MyInbox(ModelViewSet):  # all inbox messages read/unread
-    serializer_class = MessageSerializer2
+    serializer_class = MessageSerializerAll
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     http_method_names = ['get', 'head']  # , 'post', 'delete'
 
@@ -89,7 +89,7 @@ class MyInbox(ModelViewSet):  # all inbox messages read/unread
 
 
 class MyInboxUnread(ModelViewSet):  # all unread messages
-    serializer_class = MessageSerializer2
+    serializer_class = MessageSerializerAll
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     http_method_names = ['get', 'head']  # , 'post', 'delete'
 
@@ -101,7 +101,7 @@ class MyInboxUnread(ModelViewSet):  # all unread messages
 
 
 class MyListView(ViewSet):
-    serializer_class = MessageSerializer2
+    serializer_class = MessageSerializerAll
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def list(self, request):
